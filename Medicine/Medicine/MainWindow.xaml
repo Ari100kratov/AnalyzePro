@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Medicine"
         xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" x:Class="Medicine.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
+        Title="MainWindow" Height="550" Width="860">
     <Grid>
 
         <dxwui:HamburgerMenu>
@@ -17,8 +17,8 @@
             <dxwui:HamburgerMenu.Content>
                 <dxwui:NavigationFrame/>
             </dxwui:HamburgerMenu.Content>
-            <dxwui:HamburgerMenuNavigationButton NavigationTargetTypeName="PatientPage" Content="Пациенты" GlyphWidth="32" GlyphHeight="32" IsSelected="True" Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_User.svg}"/>
-            <dxwui:HamburgerMenuNavigationButton Content="Анализы" GlyphWidth="32" Glyph="{dx:DXImage Office2013/Actions/AddItem_16x16.png}" GlyphHeight="32"/>
+            <dxwui:HamburgerMenuNavigationButton NavigationTargetTypeName="PatientPage" Content="Пациенты" GlyphWidth="32" GlyphHeight="32" IsSelected="True" Glyph="{dx:DXImage Images/People/Team_32x32.png}"/>
+            <dxwui:HamburgerMenuNavigationButton Content="Анализы" NavigationTargetTypeName="TemplatePage" GlyphWidth="32" GlyphHeight="32" Glyph="{dx:DXImage Images/Filter Elements/ShowAll_32x32.png}"/>
             <dxwui:HamburgerMenuHyperlinkButton Content="Support" NavigateUri="https://www.devexpress.com/Support/"/>
         </dxwui:HamburgerMenu>
 

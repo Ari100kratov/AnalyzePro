@@ -14,8 +14,22 @@ namespace Medicine.Data
             : base("DbConnection")
         {
             Database.SetInitializer(new DropCreateDatabaseIfModelChanges<DataContext>());
+            this.Configuration.AutoDetectChangesEnabled = true;
+            this.Configuration.ProxyCreationEnabled = true;
+
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            // configures one-to-many relationship
+            modelBuilder.Entity<Template>()
+                .HasOptional(s => s.Group)
+                .WithMany(g => g.Templates)
+                .HasForeignKey(s => s.GroupId);
         }
 
         public DbSet<Patient> Patients { get; set; }
+        public DbSet<Template> Templates { get; set; }
+        public DbSet<TemplateGroup> Groups { get; set; }
     }
 }

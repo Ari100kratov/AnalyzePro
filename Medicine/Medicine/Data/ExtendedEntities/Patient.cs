@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Medicine.Common;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,23 +13,34 @@ namespace Medicine.Data.Entities
     {
         public int Age => DateTime.Now.Year - this.BirthDate.Year;
 
-        public BitmapImage PhotoImg
+        public string Gender
         {
             get
             {
-                MemoryStream stream = new MemoryStream();
-                stream.Write(this.Photo, 0, this.Photo.Length);
-                stream.Position = 0;
-                System.Drawing.Image img = System.Drawing.Image.FromStream(stream);
-                BitmapImage returnImage = new BitmapImage();
-                returnImage.BeginInit();
-                MemoryStream ms = new MemoryStream();
-                img.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-                ms.Seek(0, SeekOrigin.Begin);
-                returnImage.StreamSource = ms;
-                returnImage.EndInit();
+                switch (this.GenderId)
+                {
+                    case 0: return "Мужчина";
+                    case 1: return "Женщина";
+                }
 
-                return returnImage;
+                return "Не указан";
+            }
+        }
+
+        public byte[] PhotoExt
+        {
+            get
+            {
+                if (this.Photo != null)
+                    return this.Photo;
+                else
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        Properties.Resources.nophoto.Save(stream, Properties.Resources.nophoto.RawFormat);
+                        return stream.ToArray();
+                    }
+                }
             }
         }
     }

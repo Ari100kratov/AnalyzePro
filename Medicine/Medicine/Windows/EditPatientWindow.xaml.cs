@@ -53,7 +53,7 @@ namespace Medicine.Windows
             this.teOtherPhone.EditValue = this._patient.OtherPhoneNumber;
             this.dtBirth.EditValue = this._patient.BirthDate;
             this.ceFemale.IsChecked = this._patient.GenderId == 1;
-            this.ceFemale.IsChecked = this._patient.GenderId == 0;
+            this.ceMail.IsChecked = this._patient.GenderId == 0;
             this.teRegAddress.EditValue = this._patient.RegAddress;
             this.teResAddress.EditValue = this._patient.ResAddress;
         }

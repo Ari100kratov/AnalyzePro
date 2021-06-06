@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 D:\src\my\AnalyzePro\Medicine\Medicine\App.xaml
-3-26351299
+5610711076
 
-11-1953698694
+16-141316771
 321821346670
-MainWindow.xaml;Pages\PatientPage.xaml;Windows\EditPatientWindow.xaml;
+MainWindow.xaml;Pages\PatientPage.xaml;Pages\TemplatePage.xaml;Windows\EditPatientWindow.xaml;Windows\EditTemplateWindow.xaml;
 
 False
 

@@ -76,3 +76,7 @@ D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Windows\EditPatientWindow.g.cs
 D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Windows\EditPatientWindow.baml
 D:\src\my\AnalyzePro\Medicine\Medicine\bin\Debug\DevExpress.Xpf.Themes.VS2019Blue.v20.1.dll
 D:\src\my\AnalyzePro\Medicine\Medicine\bin\Debug\DevExpress.Xpf.Themes.Office2019Colorful.v20.1.dll
+D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Pages\TemplatePage.g.cs
+D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Pages\TemplatePage.baml
+D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Windows\EditTemplateWindow.g.cs
+D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Windows\EditTemplateWindow.baml

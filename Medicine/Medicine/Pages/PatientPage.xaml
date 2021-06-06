@@ -20,17 +20,19 @@
         </Grid.RowDefinitions>
 
         <dxg:GridControl x:Name="gcPatients" Margin="5" Grid.Row="2" EnableSmartColumnsGeneration="True" SelectionMode="Row" SelectedItemChanged="gcPatients_SelectedItemChanged" UseFieldNameForSerialization="False">
-            <dxg:GridControl.View>
-                <dxg:CardView />
+            <dxg:GridControl.View >
+                <dxg:CardView ShowSearchPanelMode="Always"/>
             </dxg:GridControl.View>
-            <dxg:GridColumn FieldName="Photo" Header="Фото" AllowEditing="false" AllowMoving="True" FixedWidth="True" AllowSearchPanel="False" >
+            <dxg:GridColumn FieldName="PhotoExt" Header="Фото" AllowEditing="false" AllowMoving="True" FixedWidth="True" AllowSearchPanel="False" >
                 <dxg:GridColumn.EditSettings>
-                    <dxe:ImageEditSettings MaxWidth="170" RenderOptions.EdgeMode="Aliased"/>
+                    <dxe:ImageEditSettings MaxWidth="170" RenderOptions.EdgeMode="Aliased" RenderOptions.BitmapScalingMode="HighQuality" />
                 </dxg:GridColumn.EditSettings>
             </dxg:GridColumn>
             <dxg:GridColumn FieldName="LastName" Header="Фамилия" AllowEditing="False"/>
             <dxg:GridColumn AllowEditing="False" FieldName="FirstName" Header="Имя"/>
             <dxg:GridColumn AllowEditing="False" FieldName="MiddleName" Header="Отчество"/>
+            <dxg:GridColumn FieldName="Gender" Header="Пол"/>
+            <dxg:GridColumn FieldName="Age" Header="Возраст"/>
         </dxg:GridControl>
 
         <Label Grid.Row="0" Content="Справочник пациентов" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Height="39" Width="785" FontSize="24"/>
