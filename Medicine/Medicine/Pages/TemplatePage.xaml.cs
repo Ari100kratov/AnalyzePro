@@ -46,12 +46,7 @@ namespace Medicine.Pages
 
         private void NavigationPage_Loaded(object sender, RoutedEventArgs e)
         {
-            using (var context = new DataContext())
-            {
-                this._templateList = context.Templates.Include("Group").Include("Items").ToList();
-            };
-
-            this.gcTemplates.ItemsSource = this._templateList;
+            this.RefreshGcTemplates();
             this.gcTemplates.GroupBy("Group.Name");
             this.gcItems.ItemsSource = this._itemList;
         }
@@ -59,9 +54,26 @@ namespace Medicine.Pages
         private void gcTemplates_SelectedItemChanged(object sender, DevExpress.Xpf.Grid.SelectedItemChangedEventArgs e)
         {
             this.sbEditTemplate.IsEnabled =
+                this.sbAddItem.IsEnabled =
                 this.sbDeleteTemplate.IsEnabled = this._selectedTemplate != null;
 
-            this._itemList = this._selectedTemplate is null ? new List<Item>() : this._selectedTemplate.Items.ToList();
+            var templateId = this._selectedTemplate?.Id;
+            if (!templateId.HasValue)
+            {
+                this._itemList = new List<Item>();
+            }
+            else
+            {
+                using (var context = new DataContext())
+                {
+                    this._itemList = context.Items
+                        .Include("CheckLists").Include("Template")
+                        .Where(x => x.TemplateId == templateId.Value)
+                        .ToList();
+                }
+            }
+
+            this.gcItems.ItemsSource = this._itemList;
             this.gcItems.RefreshData();
         }
 
@@ -74,26 +86,35 @@ namespace Medicine.Pages
             {
                 using (var context = new DataContext())
                 {
-                    this._selectedTemplate.GroupId = null;
-                    this._selectedTemplate.Group = null;
-                    context.Entry(this._selectedTemplate).State = System.Data.Entity.EntityState.Deleted;
+                    context.Templates.Attach(this._selectedTemplate);
+                    context.Templates.Remove(this._selectedTemplate);
                     context.SaveChanges();
                 }
 
                 this._templateList.Remove(this._selectedTemplate);
                 this.gcTemplates.RefreshData();
+                this.gcTemplates.SelectedItem = this._templateList.FirstOrDefault();
             }
         }
 
         private void sbEditTemplate_Click(object sender, RoutedEventArgs e)
         {
             EditTemplateWindow.Execute(this._selectedTemplate);
+            this.RefreshGcTemplates();
+        }
+
+        private void RefreshGcTemplates()
+        {
+            var selectedTemplateId = this._selectedTemplate?.Id;
             using (var context = new DataContext())
             {
                 this._templateList = context.Templates.Include("Group").ToList();
             };
 
             this.gcTemplates.ItemsSource = this._templateList;
+
+            if (selectedTemplateId.HasValue)
+                this.gcTemplates.SelectedItem = this._templateList.Find(x => x.Id == selectedTemplateId);
         }
 
         private void gcItems_SelectedItemChanged(object sender, DevExpress.Xpf.Grid.SelectedItemChangedEventArgs e)
@@ -104,17 +125,40 @@ namespace Medicine.Pages
 
         private void sbAddItem_Click(object sender, RoutedEventArgs e)
         {
+            var item = AddItemWindow.Execute(this._selectedTemplate);
 
+            if (item.Id > 0)
+            {
+                this._itemList.Add(item);
+                this.gcItems.RefreshData();
+                if (EditItemWindow.Execute(item) == true)
+                    this.gcItems.RefreshData();
+            }
         }
 
         private void sbEditItem_Click(object sender, RoutedEventArgs e)
         {
-
+            if (EditItemWindow.Execute(this._selectedItem) == true)
+                this.gcItems.RefreshData();
         }
 
         private void sbDeleteItem_Click(object sender, RoutedEventArgs e)
         {
+            if (MessageBox.Show("Удалить выбранный параметр?"
+               , "Подтверждение"
+               , MessageBoxButton.YesNo
+               , MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                using (var context = new DataContext())
+                {
+                    context.Items.Attach(this._selectedItem);
+                    context.Items.Remove(this._selectedItem);
+                    context.SaveChanges();
+                }
 
+                this._itemList.Remove(this._selectedItem);
+                this.gcItems.RefreshData();
+            }
         }
     }
 }

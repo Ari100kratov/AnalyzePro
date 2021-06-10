@@ -10,8 +10,10 @@ namespace Medicine.Data.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
+        public int TypeId { get; set; }
+        public string MeasureUnit { get; set; }
         public int TemplateId { get; set; }
-        public Template Template { get; set; }
+        public virtual Template Template { get; set; }
+        public virtual List<CheckList> CheckLists { get; set; }
     }
 }

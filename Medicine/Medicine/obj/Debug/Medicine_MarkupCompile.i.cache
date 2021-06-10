@@ -9,12 +9,12 @@ Medicine
 none
 false
 DEBUG;TRACE
-D:\src\my\AnalyzePro\Medicine\Medicine\App.xaml
-5610711076
 
-17-895886555
-361312936061
-MainWindow.xaml;Pages\PatientPage.xaml;Pages\TemplatePage.xaml;Windows\EditPatientWindow.xaml;Windows\EditTemplateWindow.xaml;
+9765823204
+
+23-32233630
+36-708054647
+App.xaml;MainWindow.xaml;Pages\PatientPage.xaml;Pages\StartPage.xaml;Pages\TemplatePage.xaml;Windows\AddItemWindow.xaml;Windows\EditItemWindow.xaml;Windows\EditPatientWindow.xaml;Windows\EditTemplateWindow.xaml;
 
 True
 

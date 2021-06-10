@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Medicine.Windows" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
                   xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" x:Class="Medicine.Windows.EditTemplateWindow"
                   mc:Ignorable="d"
-        Height="150" Width="400" WindowStartupLocation="CenterScreen" Loaded="ThemedWindow_Loaded">
+        Height="160" Width="400" WindowStartupLocation="CenterScreen" Loaded="ThemedWindow_Loaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>

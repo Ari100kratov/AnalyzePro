@@ -31,5 +31,7 @@ namespace Medicine.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Template> Templates { get; set; }
         public DbSet<TemplateGroup> Groups { get; set; }
+        public DbSet<CheckList> CheckLists { get; set; }
+        public DbSet<Item> Items { get; set; }
     }
 }

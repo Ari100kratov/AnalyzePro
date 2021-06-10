@@ -46,7 +46,7 @@
 
         <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Margin="5,10,5,5">
             <Label Content="Таблица параметров" Margin="0,0,10,0" FontSize="18" FontStyle="Italic"></Label>
-            <dx:SimpleButton x:Name="sbAddItem" Margin="0,0,5,0"  Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_Add.svg}" Click="sbAddItem_Click" />
+            <dx:SimpleButton x:Name="sbAddItem" IsEnabled="False" Margin="0,0,5,0"  Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_Add.svg}" Click="sbAddItem_Click" />
             <dx:SimpleButton x:Name="sbEditItem" IsEnabled="False" Margin="0,0,5,0" Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_Edit.svg}" Click="sbEditItem_Click" />
             <dx:SimpleButton x:Name="sbDeleteItem" IsEnabled="False" Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_Delete.svg}" Click="sbDeleteItem_Click"/>
         </StackPanel>
@@ -56,6 +56,7 @@
                 <dxg:TableView EditFormCaptionBinding="{x:Null}" UseLegacyColumnVisibleIndexes="False" AutoWidth="True" AllowEditing="False"/>
             </dxg:GridControl.View>
             <dxg:GridColumn AllowEditing="false" FieldName="Name" Header="Наименование параметра"/>
+            <dxg:GridColumn FieldName="TypeName" Header="Тип"/>
         </dxg:GridControl>
     </Grid>
 </dxwui:NavigationPage>

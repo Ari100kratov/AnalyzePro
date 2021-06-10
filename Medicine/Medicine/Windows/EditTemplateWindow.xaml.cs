@@ -67,7 +67,7 @@ namespace Medicine.Windows
 
         private void sbSave_Click(object sender, RoutedEventArgs e)
         {
-            this._editTemplate.Name = this.teName.EditValue.ToString();
+            this._editTemplate.Name = this.teName.Text;
 
             if (this._selectedGroup.Id == 0)
             {
@@ -82,11 +82,16 @@ namespace Medicine.Windows
 
             using (var context = new DataContext())
             {
+                if (this._editTemplate.GroupId.HasValue)
+                    context.Entry(this._selectedGroup).State = System.Data.Entity.EntityState.Unchanged;
+
                 if (this._isAdd)
                     context.Templates.Add(this._editTemplate);
                 else
+                {
+                    context.Templates.Attach(this._editTemplate);
                     context.Entry(this._editTemplate).State = System.Data.Entity.EntityState.Modified;
-
+                }
                 context.SaveChanges();
             }
 
@@ -110,14 +115,17 @@ namespace Medicine.Windows
         private void sbGroupSave_Click(object sender, RoutedEventArgs e)
         {
             var editGroup = this._isAddGroupMode ? new TemplateGroup() : this._selectedGroup;
-            editGroup.Name = this.teGroup.EditValue.ToString();
+            editGroup.Name = this.teGroup.Text;
 
             using (var context = new DataContext())
             {
                 if (this._isAddGroupMode)
                     context.Groups.Add(editGroup);
                 else
+                {
+                    context.Groups.Attach(editGroup);
                     context.Entry(editGroup).State = System.Data.Entity.EntityState.Modified;
+                }
 
                 context.SaveChanges();
             }
@@ -126,6 +134,8 @@ namespace Medicine.Windows
                 this._groupList.Add(editGroup);
 
             this.ceGroup.RefreshData();
+            this.ceGroup.SelectedItem = editGroup;
+
             this.lgSelectMode.Visibility = Visibility.Visible;
             this.lgEditMode.Visibility = Visibility.Collapsed;
         }
@@ -154,9 +164,8 @@ namespace Medicine.Windows
             {
                 using (var context = new DataContext())
                 {
-                    //this._selectedGroup.GroupId = null;
-                    //this._selectedTemplate.Group = null;
-                    context.Entry(this._selectedGroup).State = System.Data.Entity.EntityState.Deleted;
+                    context.Groups.Attach(this._selectedGroup);
+                    context.Groups.Remove(this._selectedGroup);
                     context.SaveChanges();
                 }
 
