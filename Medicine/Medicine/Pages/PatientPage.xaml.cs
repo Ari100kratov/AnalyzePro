@@ -43,10 +43,7 @@ namespace Medicine.Pages
 
         private void NavigationPage_Loaded(object sender, RoutedEventArgs e)
         {
-            using (var context = new DataContext())
-            {
-                this._patientList = context.Patients.ToList();
-            };
+            this._patientList = App.Context.Patients.ToList();
 
             this.gcPatients.ItemsSource = this._patientList;
         }
@@ -65,11 +62,8 @@ namespace Medicine.Pages
                 , MessageBoxButton.YesNo
                 , MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                using (var context = new DataContext())
-                {
-                    context.Entry(this._currentPatient).State = System.Data.Entity.EntityState.Deleted;
-                    context.SaveChanges();
-                }
+                App.Context.Patients.Remove(this._currentPatient);
+                App.Context.SaveChanges();
 
                 this._patientList.Remove(this._currentPatient);
                 this.gcPatients.RefreshData();

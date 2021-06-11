@@ -36,10 +36,11 @@ namespace Medicine.Pages
 
         private void sbAddTemplate_Click(object sender, RoutedEventArgs e)
         {
-            var template = new Template();
-            if (EditTemplateWindow.Execute(template) == true)
+            var template = AddItemWindow.Execute();
+            if (template.Id > 0)
             {
                 this._templateList.Add(template);
+                EditTemplateWindow.Execute(template);
                 this.gcTemplates.RefreshData();
             }
         }
@@ -64,13 +65,8 @@ namespace Medicine.Pages
             }
             else
             {
-                using (var context = new DataContext())
-                {
-                    this._itemList = context.Items
-                        .Include("CheckLists").Include("Template")
-                        .Where(x => x.TemplateId == templateId.Value)
-                        .ToList();
-                }
+                this._itemList = App.Context.Items.Where(x => x.TemplateId == templateId).ToList();
+
             }
 
             this.gcItems.ItemsSource = this._itemList;
@@ -84,12 +80,8 @@ namespace Medicine.Pages
                 , MessageBoxButton.YesNo
                 , MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                using (var context = new DataContext())
-                {
-                    context.Templates.Attach(this._selectedTemplate);
-                    context.Templates.Remove(this._selectedTemplate);
-                    context.SaveChanges();
-                }
+                App.Context.Templates.Remove(this._selectedTemplate);
+                App.Context.SaveChanges();
 
                 this._templateList.Remove(this._selectedTemplate);
                 this.gcTemplates.RefreshData();
@@ -106,10 +98,7 @@ namespace Medicine.Pages
         private void RefreshGcTemplates()
         {
             var selectedTemplateId = this._selectedTemplate?.Id;
-            using (var context = new DataContext())
-            {
-                this._templateList = context.Templates.Include("Group").ToList();
-            };
+            this._templateList = App.Context.Templates.Include("Group").ToList();
 
             this.gcTemplates.ItemsSource = this._templateList;
 
@@ -130,9 +119,10 @@ namespace Medicine.Pages
             if (item.Id > 0)
             {
                 this._itemList.Add(item);
-                this.gcItems.RefreshData();
                 if (EditItemWindow.Execute(item) == true)
                     this.gcItems.RefreshData();
+
+                this.gcItems.RefreshData();
             }
         }
 
@@ -149,12 +139,8 @@ namespace Medicine.Pages
                , MessageBoxButton.YesNo
                , MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                using (var context = new DataContext())
-                {
-                    context.Items.Attach(this._selectedItem);
-                    context.Items.Remove(this._selectedItem);
-                    context.SaveChanges();
-                }
+                App.Context.Items.Remove(this._selectedItem);
+                App.Context.SaveChanges();
 
                 this._itemList.Remove(this._selectedItem);
                 this.gcItems.RefreshData();

@@ -14,8 +14,7 @@ namespace Medicine
         {
             base.OnStartup(e);
 
-            var dataContext = new DataContext();
-            dataContext.Database.Initialize(true);
+            Context.Database.Initialize(true);
         }
 
         [STAThread]

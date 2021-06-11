@@ -29,6 +29,7 @@ namespace Medicine.Windows
         private CheckList _selectedCheckList => this.ceGroup.SelectedItem as CheckList;
         private bool _isAddCheckListMode = false;
         private List<CheckList> _checkLists = new List<CheckList>();
+        private List<Target> _targetList = new List<Target>();
         public EditItemWindow()
         {
             InitializeComponent();
@@ -50,14 +51,18 @@ namespace Medicine.Windows
             this.teName.EditValue = this._editItem.Name;
             this.teMeasureUnit.EditValue = this._editItem.MeasureUnit;
 
-            using (var context = new DataContext())
-            {
-                this._checkLists = context.CheckLists
-                    .Where(x => x.ItemId == this._editItem.Id)
-                    .ToList();
-            }
+            this._checkLists = App.Context.CheckLists
+                .Where(x => x.ItemId == this._editItem.Id)
+                .ToList();
 
             this.ceGroup.ItemsSource = this._checkLists;
+
+            this._targetList = App.Context.Targets
+               .Where(x => x.TemplateId == this._editItem.TemplateId)
+               .ToList();
+
+            this.tlcTargets.ItemsSource = this._targetList;
+            this.tlvTargets.ExpandAllNodes();
         }
 
         private void ceGroup_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
@@ -82,17 +87,10 @@ namespace Medicine.Windows
 
             editCheckList.Name = this.teGroup.Text;
 
-            using (var context = new DataContext())
-            {
-                context.CheckLists.Attach(editCheckList);
+            if (this._isAddCheckListMode)
+                App.Context.CheckLists.Add(editCheckList);
 
-                if (this._isAddCheckListMode)
-                    context.CheckLists.Add(editCheckList);
-                else
-                    context.Entry(editCheckList).State = System.Data.Entity.EntityState.Modified;
-
-                context.SaveChanges();
-            }
+            App.Context.SaveChanges();
 
             if (this._isAddCheckListMode)
                 this._checkLists.Add(editCheckList);
@@ -102,6 +100,7 @@ namespace Medicine.Windows
 
             this.lgSelectMode.Visibility = Visibility.Visible;
             this.lgEditMode.Visibility = Visibility.Collapsed;
+            RefreshBorders();
         }
 
         private void sbGroupCancel_Click(object sender, RoutedEventArgs e)
@@ -126,12 +125,8 @@ namespace Medicine.Windows
                 , MessageBoxButton.YesNo
                 , MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                using (var context = new DataContext())
-                {
-                    context.CheckLists.Attach(this._selectedCheckList);
-                    context.CheckLists.Remove(this._selectedCheckList);
-                    context.SaveChanges();
-                }
+                App.Context.CheckLists.Remove(this._selectedCheckList);
+                App.Context.SaveChanges();
 
                 this._checkLists.Remove(this._selectedCheckList);
                 this.ceGroup.RefreshData();
@@ -141,6 +136,7 @@ namespace Medicine.Windows
                     this.sbEditGroup.IsEnabled = this.sbDeleteGroup.IsEnabled = false;
 
                 this.ceGroup.SelectedItem = firstCheckList;
+                RefreshBorders();
             }
         }
 
@@ -153,6 +149,8 @@ namespace Medicine.Windows
             this.liMeasureUnit.Visibility = this._selectedType.Id == 0
                 ? Visibility.Visible
                 : Visibility.Collapsed;
+
+            this.RefreshBorders();
         }
 
         private void sbCancel_Click(object sender, RoutedEventArgs e)
@@ -167,14 +165,204 @@ namespace Medicine.Windows
             this._editItem.MeasureUnit = this.teMeasureUnit.Text;
             this._editItem.Name = this.teName.EditValue.ToString();
 
-            using (var context = new DataContext())
-            {
-                context.Items.Attach(this._editItem);
-                context.Entry(this._editItem).State = System.Data.Entity.EntityState.Modified;
-                context.SaveChanges();
-            }
+            App.Context.SaveChanges();
 
             this.DialogResult = true;
+        }
+
+        private Target _selectedTarget => this.tlcTargets.SelectedItem as Target;
+        private List<Target> _selectedTargets = new List<Target>();
+
+        private void tlcTargets_SelectedItemChanged(object sender, DevExpress.Xpf.Grid.SelectedItemChangedEventArgs e)
+        {
+            this._targetList.ForEach(x => x.IsChecked = false);
+
+            if (this._selectedTarget != null)
+            {
+                GetLowTargets(this._selectedTarget);
+                GetTopTargets(this._selectedTarget);
+                this._selectedTarget.IsChecked = true;
+            }
+
+            this.tlcTargets.RefreshData();
+            this.RefreshBorders();
+
+            void GetLowTargets(Target target)
+            {
+                var children = this._targetList.FirstOrDefault(x => x.ParentId == target.Id);
+                if (children != null)
+                {
+                    children.IsChecked = true;
+                    GetLowTargets(children);
+                }
+            }
+
+            void GetTopTargets(Target target)
+            {
+                var parent = this._targetList.FirstOrDefault(x => x.Id == target.ParentId);
+                if (parent != null)
+                {
+                    parent.IsChecked = true;
+                    GetTopTargets(parent);
+                }
+            }
+        }
+
+        private void tsForAll_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.tsForAll.IsChecked.Value)
+            {
+                this._targetList.ForEach(x => x.IsChecked = true);
+                this.tlvTargets.IsEnabled = false;
+                this.tlcTargets.RefreshData();
+                RefreshBorders();
+            }
+            else
+            {
+                this.tlcTargets.SelectedItem = null;
+                this.tlvTargets.IsEnabled = true;
+            }
+        }
+
+        private void teMeasureUnit_EditValueChanged(object sender, DevExpress.Xpf.Editors.EditValueChangedEventArgs e)
+        {
+            this.liNormalMeasureUnit.Label =
+                this.liWarningMeasureUnit.Label = string.IsNullOrWhiteSpace(this.teMeasureUnit.Text)
+                ? "ед. измерения" : this.teMeasureUnit.Text;
+        }
+
+        private void RefreshBorders()
+        {
+            this.spNumberNormal.Visibility = Visibility.Collapsed;
+            this.spNumberWarning.Visibility = Visibility.Collapsed;
+            this.spListNormal.Visibility = Visibility.Collapsed;
+            this.spListWarning.Visibility = Visibility.Collapsed;
+            this.lblNotSelected.Visibility = Visibility.Collapsed;
+            this.lblHeader.Visibility = Visibility.Visible;
+            this.sbSaveChanges.Visibility = Visibility.Visible;
+
+            var checkedTargets = this._targetList
+                .Where(x => x.IsChecked).ToList();
+
+            if (checkedTargets.Count == 0)
+            {
+                this.lblNotSelected.Visibility = Visibility.Visible;
+                this.lblHeader.Visibility = Visibility.Collapsed;
+                this.sbSaveChanges.Visibility = Visibility.Collapsed;
+                return;
+            }
+
+            var borderList = App.Context.Borders
+                .Where(x => x.ItemId == this._editItem.Id)
+                .ToList();
+
+            var border = borderList
+                .Where(x => checkedTargets.Exists(c => c.BorderId == x.Id))
+                .LastOrDefault();
+
+            if (this._selectedType.Id == 0)
+            {
+                this.spNumberNormal.Visibility = Visibility.Visible;
+                this.spNumberWarning.Visibility = Visibility.Visible;
+
+                this.seMinNormal.EditValue = border?.NormalMin ?? 0;
+                this.seMaxNormal.EditValue = border?.NormalMax ?? 0;
+                this.seMinWarning.EditValue = border?.WarningMin ?? 0;
+                this.seMaxWarning.EditValue = border?.WarningMax ?? 0;
+            }
+            else
+            {
+                this.spListNormal.Visibility = Visibility.Visible;
+                this.spListWarning.Visibility = Visibility.Visible;
+
+                var list = this._checkLists.ToList();
+                this.ceNormal.ItemsSource = list;
+                this.ceWarning.ItemsSource = list;
+
+                var nortmalItem = border?.NormalItem is null ? list.FirstOrDefault() : list.Find(x => x.Id == border.NormalItem);
+                var warningItem = border?.WarningItem is null ? list.FirstOrDefault() : list.Find(x => x.Id == border.WarningItem);
+                this.ceNormal.SelectedItem = nortmalItem;
+                this.ceWarning.SelectedItem = warningItem;
+            }
+        }
+
+        private CheckList _selectedNormalItem => this.ceNormal.SelectedItem as CheckList;
+        private CheckList _selectedWarningItem => this.ceWarning.SelectedItem as CheckList;
+        private void sbSaveChanges_Click(object sender, RoutedEventArgs e)
+        {
+            var borderList = App.Context.Borders
+                .Where(x => x.ItemId == this._editItem.Id)
+                .ToList();
+
+            var checkedTargets = this._targetList
+                .Where(x => x.IsChecked).ToList();
+
+            foreach (var target in checkedTargets)
+            {
+                var border = borderList.Find(x => x.Id == target.BorderId);
+                if (border is null)
+                {
+                    if (this._selectedType.Id == 0)
+                    {
+                        border = new Data.Entities.Border
+                        {
+                            ItemId = this._editItem.Id,
+                            NormalMin = this.seMinNormal.Value,
+                            NormalMax = this.seMaxNormal.Value,
+                            WarningMin = this.seMinWarning.Value,
+                            WarningMax = this.seMaxWarning.Value,
+                            NormalItem = null,
+                            WarningItem = null
+                        };
+
+                        App.Context.Borders.Add(border);
+                        App.Context.SaveChanges();
+                    }
+                    else
+                    {
+                        border = new Data.Entities.Border
+                        {
+                            ItemId = this._editItem.Id,
+                            NormalMin = 0,
+                            NormalMax = 0,
+                            WarningMin = 0,
+                            WarningMax = 0,
+                            NormalItem = this._selectedNormalItem?.Id,
+                            WarningItem = this._selectedNormalItem?.Id
+                        };
+
+                        App.Context.Borders.Add(border);
+                        App.Context.SaveChanges();
+                    }
+                }
+                else
+                {
+                    if (this._selectedType.Id == 0)
+                    {
+                        border.NormalMin = this.seMinNormal.Value;
+                        border.NormalMax = this.seMaxNormal.Value;
+                        border.WarningMin = this.seMinWarning.Value;
+                        border.WarningMax = this.seMaxWarning.Value;
+                        border.NormalItem = null;
+                        border.WarningItem = null;
+                    }
+                    else
+                    {
+                        border.ItemId = this._editItem.Id;
+                        border.NormalMin = 0;
+                        border.NormalMax = 0;
+                        border.WarningMin = 0;
+                        border.WarningMax = 0;
+                        border.NormalItem = this._selectedNormalItem?.Id;
+                        border.WarningItem = this._selectedNormalItem?.Id;
+                    }
+                }
+
+                target.BorderId = border.Id;
+            }
+
+            App.Context.SaveChanges();
+            MessageBox.Show("ДАнные успешно сохранены", "Сообщение", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

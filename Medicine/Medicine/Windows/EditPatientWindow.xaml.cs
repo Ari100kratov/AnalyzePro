@@ -86,15 +86,10 @@ namespace Medicine.Windows
             this._patient.GenderId = (bool)this.ceMail.IsChecked ? 0 : 1;
             this._patient.Photo = this.iePhoto.EditValue as byte[];
 
-            using (var context = new DataContext())
-            {
-                if (this._isAdd)
-                    context.Patients.Add(this._patient);
-                else
-                    context.Entry(this._patient).State = System.Data.Entity.EntityState.Modified;
+            if (this._isAdd)
+                App.Context.Patients.Add(this._patient);
 
-                context.SaveChanges();
-            }
+            App.Context.SaveChanges();
 
             this.DialogResult = true;
         }

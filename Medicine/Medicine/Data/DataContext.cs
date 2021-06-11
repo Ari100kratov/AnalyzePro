@@ -33,5 +33,7 @@ namespace Medicine.Data
         public DbSet<TemplateGroup> Groups { get; set; }
         public DbSet<CheckList> CheckLists { get; set; }
         public DbSet<Item> Items { get; set; }
+        public DbSet<Target> Targets { get; set; }
+        public DbSet<Border> Borders { get; set; }
     }
 }

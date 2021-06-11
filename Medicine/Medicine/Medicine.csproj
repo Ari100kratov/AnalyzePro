@@ -36,6 +36,14 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\medicine.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <Win32Resource>
+    </Win32Resource>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevExpress.Charts.v20.1.Core, Version=20.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Data.Desktop.v20.1, Version=20.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
@@ -82,8 +90,10 @@
     </Page>
     <Compile Include="Common\GenderEnum.cs" />
     <Compile Include="Common\ItemType.cs" />
+    <Compile Include="Data\Entities\Border.cs" />
     <Compile Include="Data\Entities\CheckList.cs" />
     <Compile Include="Data\Entities\Item.cs" />
+    <Compile Include="Data\Entities\Target.cs" />
     <Compile Include="Data\Entities\Template.cs" />
     <Compile Include="Data\Entities\TemplateGroup.cs" />
     <Compile Include="Data\ExtendedEntities\Item.cs" />
@@ -102,6 +112,9 @@
     </Compile>
     <Compile Include="Windows\EditPatientWindow.xaml.cs">
       <DependentUpon>EditPatientWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditTargetWindow.xaml.cs">
+      <DependentUpon>EditTargetWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\EditTemplateWindow.xaml.cs">
       <DependentUpon>EditTemplateWindow.xaml</DependentUpon>
@@ -144,6 +157,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\EditTargetWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\EditTemplateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -169,7 +186,7 @@
     <EmbeddedResource Include="Properties\Licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -183,12 +200,17 @@
     <None Include="Resources\nophoto.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\back.PNG" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="EntityFramework">
       <Version>6.4.4</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\medicine.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\last.PNG">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -48,10 +48,7 @@ namespace Medicine.Windows
 
         private void ThemedWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            using (var context = new DataContext())
-            {
-                this._groupList = context.Groups.Include("Templates").ToList();
-            };
+            this._groupList = App.Context.Groups.Include("Templates").ToList();
 
             var notSelected = new TemplateGroup { Id = 0, Name = "Не выбрано" };
             this._groupList.Add(notSelected);
@@ -59,10 +56,12 @@ namespace Medicine.Windows
 
             this.ceGroup.SelectedItem = this._editTemplate.Group is null
                 ? notSelected
-                : this._groupList
-                .Find(x => x.Id == this._editTemplate.Group.Id);
+                : this._editTemplate.Group;
 
             this.teName.EditValue = this._editTemplate.Name;
+
+            this._targetList = App.Context.Targets.Where(x => x.TemplateId == this._editTemplate.Id).ToList();
+            this.tlcTargets.ItemsSource = this._targetList;
         }
 
         private void sbSave_Click(object sender, RoutedEventArgs e)
@@ -80,20 +79,10 @@ namespace Medicine.Windows
                 this._editTemplate.Group = this._selectedGroup;
             }
 
-            using (var context = new DataContext())
-            {
-                if (this._editTemplate.GroupId.HasValue)
-                    context.Entry(this._selectedGroup).State = System.Data.Entity.EntityState.Unchanged;
+            if (this._isAdd)
+                App.Context.Templates.Add(this._editTemplate);
 
-                if (this._isAdd)
-                    context.Templates.Add(this._editTemplate);
-                else
-                {
-                    context.Templates.Attach(this._editTemplate);
-                    context.Entry(this._editTemplate).State = System.Data.Entity.EntityState.Modified;
-                }
-                context.SaveChanges();
-            }
+            App.Context.SaveChanges();
 
             this.DialogResult = true;
         }
@@ -117,18 +106,10 @@ namespace Medicine.Windows
             var editGroup = this._isAddGroupMode ? new TemplateGroup() : this._selectedGroup;
             editGroup.Name = this.teGroup.Text;
 
-            using (var context = new DataContext())
-            {
-                if (this._isAddGroupMode)
-                    context.Groups.Add(editGroup);
-                else
-                {
-                    context.Groups.Attach(editGroup);
-                    context.Entry(editGroup).State = System.Data.Entity.EntityState.Modified;
-                }
+            if (this._isAddGroupMode)
+                App.Context.Groups.Add(editGroup);
 
-                context.SaveChanges();
-            }
+            App.Context.SaveChanges();
 
             if (this._isAddGroupMode)
                 this._groupList.Add(editGroup);
@@ -157,22 +138,59 @@ namespace Medicine.Windows
 
         private void sbDeleteGroup_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Удалить выбранную группу?"
+            if (MessageBox.Show("Удалить выбранную группу шаблонов?"
                 , "Подтверждение"
                 , MessageBoxButton.YesNo
                 , MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                using (var context = new DataContext())
-                {
-                    context.Groups.Attach(this._selectedGroup);
-                    context.Groups.Remove(this._selectedGroup);
-                    context.SaveChanges();
-                }
+                App.Context.Groups.Remove(this._selectedGroup);
+                App.Context.SaveChanges();
 
                 this._groupList.Remove(this._selectedGroup);
                 this.ceGroup.RefreshData();
                 this.ceGroup.SelectedItem = this._groupList.FirstOrDefault();
             }
+        }
+
+        private List<Target> _targetList = new List<Target>();
+        private Target _selectedTarget => this.tlcTargets.SelectedItem as Target;
+
+        private void sbAddTarget_Click(object sender, RoutedEventArgs e)
+        {
+            var newTarget = new Target { TemplateId = this._editTemplate.Id };
+            if (EditTargetWindow.Execute(newTarget) == true)
+            {
+                this._targetList.Add(newTarget);
+                this.tlcTargets.RefreshData();
+            }
+        }
+
+        private void sbEditTarget_Click(object sender, RoutedEventArgs e)
+        {
+            if (EditTargetWindow.Execute(this._selectedTarget) == true)
+                this.tlcTargets.RefreshData();
+        }
+
+        private void sbDeleteTarget_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Удалить выбранную целевую группу?"
+                , "Подтверждение"
+                , MessageBoxButton.YesNo
+                , MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                App.Context.Targets.Remove(this._selectedTarget);
+                App.Context.SaveChanges();
+
+                this._targetList.Remove(this._selectedTarget);
+                this.tlcTargets.RefreshData();
+                this.tlcTargets.SelectedItem = this._targetList.FirstOrDefault();
+            }
+        }
+
+        private void tlcTargets_SelectedItemChanged(object sender, DevExpress.Xpf.Grid.SelectedItemChangedEventArgs e)
+        {
+            this.sbEditTarget.IsEnabled =
+                this.sbDeleteTarget.IsEnabled = this._selectedTarget != null;
         }
     }
 }

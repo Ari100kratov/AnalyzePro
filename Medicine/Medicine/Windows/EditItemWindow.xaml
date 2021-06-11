@@ -4,15 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Medicine.Windows"
-        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" x:Class="Medicine.Windows.EditItemWindow"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" x:Class="Medicine.Windows.EditItemWindow"
         mc:Ignorable="d"
-        Height="300" Width="500" Loaded="ThemedWindow_Loaded" WindowStartupLocation="CenterScreen">
+        Height="450" Width="750" Loaded="ThemedWindow_Loaded" WindowStartupLocation="CenterScreen">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <dxlc:LayoutControl >
+        <dxlc:LayoutControl Grid.Row="0" Grid.ColumnSpan="2">
             <dxlc:LayoutGroup Orientation="Vertical">
                 <dxlc:LayoutItem Label="Наименование">
                     <dxe:TextEdit x:Name="teName"/>
@@ -52,15 +59,88 @@
                 </dxlc:LayoutGroup>
 
                 <dxlc:LayoutItem Label="Ед. измерения" x:Name="liMeasureUnit">
-                    <dxe:TextEdit x:Name="teMeasureUnit"/>
+                    <dxe:TextEdit x:Name="teMeasureUnit" EditValueChanged="teMeasureUnit_EditValueChanged"/>
                 </dxlc:LayoutItem>
-                
-                <Label Content="Форма еще не закончена" FontSize="16" HorizontalAlignment="Center"/>
+
 
             </dxlc:LayoutGroup>
         </dxlc:LayoutControl>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
+            <Label Content="Задать для всех групп"/>
+            <dxe:ToggleSwitch x:Name="tsForAll"  HorizontalAlignment="Left" Click="tsForAll_Click" />
+        </StackPanel>
+        
+        <dxg:TreeListControl x:Name="tlcTargets"  Grid.Row="2" Grid.Column="0" Margin="5,0" SelectionMode="Row"  SelectedItemChanged="tlcTargets_SelectedItemChanged" >
+            <dxg:TreeListControl.View>
+                <dxg:TreeListView CheckBoxFieldName="IsChecked" IsCheckBoxEnabledFieldName="IsEnabled"  ShowCheckboxes="True"  AutoExpandAllNodes="True" x:Name="tlvTargets" NewItemRowPosition="None" ParentFieldName="ParentId" KeyFieldName="Id" AutoWidth="True" AllowEditing="False"/>
+            </dxg:TreeListControl.View>
+            <dxg:TreeListColumn FieldName="Name" Header="Целевая группа"/>
+            <dxg:TreeListColumn FieldName="Description" Header="Примечание"/>
+        </dxg:TreeListControl>
+
+        <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            
+            <Label x:Name="lblNotSelected" Foreground="LightCoral" Content="Выберите целевую группу" Grid.RowSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24"></Label>
+            <Label x:Name="lblHeader" Content="Задайте граничные значения" FontSize="18" HorizontalAlignment="Center"></Label>
+
+            <StackPanel Background="LightGreen" Grid.Row="1" x:Name="spNumberNormal">
+                <Label Content="В пределах нормы" FontSize="16" HorizontalAlignment="Center"></Label>
+                <dxlc:LayoutControl >
+                    <dxlc:LayoutItem Label="Мин.">
+                        <dxe:SpinEdit x:Name="seMinNormal"/>
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Макс.">
+                        <dxe:SpinEdit x:Name="seMaxNormal"/>
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="ед. измерения" x:Name="liNormalMeasureUnit">
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutControl>
+            </StackPanel>
+
+            <StackPanel Background="LightYellow" Grid.Row="2" x:Name="spNumberWarning">
+                <Label Content="В пределах допустимого" FontSize="16" HorizontalAlignment="Center"></Label>
+                <dxlc:LayoutControl >
+                    <dxlc:LayoutItem Label="Мин.">
+                        <dxe:SpinEdit x:Name="seMinWarning"/>
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Макс.">
+                        <dxe:SpinEdit x:Name="seMaxWarning"/>
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="ед. измерения" x:Name="liWarningMeasureUnit">
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutControl>
+            </StackPanel>
+
+            <StackPanel Background="LightGreen" Grid.Row="1" x:Name="spListNormal">
+                <Label Content="В пределах нормы" FontSize="16" HorizontalAlignment="Center"></Label>
+                <dxlc:LayoutControl >
+                    <dxlc:LayoutItem Label="Значение из списка">
+                        <dxe:ComboBoxEdit x:Name="ceNormal" DisplayMember="Name" ValueMember="Id"/>
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutControl>
+            </StackPanel>
+
+            <StackPanel Background="LightYellow" Grid.Row="2" x:Name="spListWarning">
+                <Label Content="В пределах допустимого" FontSize="16" HorizontalAlignment="Center"></Label>
+                <dxlc:LayoutControl >
+                    <dxlc:LayoutItem Label="Значение из списка">
+                        <dxe:ComboBoxEdit x:Name="ceWarning" DisplayMember="Name" ValueMember="Id"/>
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutControl>
+            </StackPanel>
+
+
+            <dx:SimpleButton x:Name="sbSaveChanges" Margin="5" Height="30" Grid.Row="3" Content="Сохранить изменения" Glyph="{dx:DXImage Images/Actions/Apply_16x16.png}" Click="sbSaveChanges_Click"/>
+        </Grid>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center">
             <dx:SimpleButton x:Name="sbCancel" Content="Отменить" Margin="5" Height="30" Width="130" Glyph="{dx:DXImage Images/Actions/Cancel_16x16.png}" Click="sbCancel_Click"/>
             <dx:SimpleButton x:Name="sbSave" Content="Сохранить" Height="30" Width="130" Margin="0,5" Glyph="{dx:DXImage Images/Save/Save_16x16.png}" Click="sbSave_Click"/>
         </StackPanel>

@@ -13,5 +13,6 @@ namespace Medicine.Data.Entities
         public int? GroupId { get; set; }
         public virtual TemplateGroup Group { get; set; }
         public virtual List<Item> Items { get; set; }
+        public virtual List<Target> Targets { get; set; }
     }
 }

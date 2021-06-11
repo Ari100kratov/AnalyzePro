@@ -130,3 +130,5 @@ D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Windows\EditItemWindow.g.cs
 D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Windows\AddItemWindow.baml
 D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Windows\EditItemWindow.baml
 D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\App.baml
+D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Windows\EditTargetWindow.g.cs
+D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Windows\EditTargetWindow.baml
