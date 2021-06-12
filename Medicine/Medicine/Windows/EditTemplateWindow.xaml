@@ -17,7 +17,7 @@
 
         <dxlc:LayoutControl Grid.Row="0" Orientation="Vertical">
             <dxlc:LayoutItem Label="Наименование">
-                <dxe:TextEdit x:Name="teName"/>
+                <dxe:TextEdit Validate="teName_Validate" x:Name="teName"/>
             </dxlc:LayoutItem>
             <dxlc:LayoutGroup >
 

@@ -41,14 +41,13 @@ namespace Medicine.Windows
         private void ThemedWindow_Loaded(object sender, RoutedEventArgs e)
         {
             this.Title = this._isAdd ? "Создание пациента" : "Редактирование пациента";
-
             if (this._isAdd)
                 return;
 
             this.iePhoto.EditValue = this._patient.Photo;
-            this.teFirstName.Text = this._patient.FirstName;
-            this.teLastName.Text = this._patient.LastName;
-            this.teMiddleName.Text = this._patient.MiddleName;
+            this.teFirstName.EditValue = this._patient.FirstName;
+            this.teLastName.EditValue = this._patient.LastName;
+            this.teMiddleName.EditValue = this._patient.MiddleName;
             this.tePhone.EditValue = this._patient.PhoneNumber;
             this.teOtherPhone.EditValue = this._patient.OtherPhoneNumber;
             this.dtBirth.EditValue = this._patient.BirthDate;
@@ -75,6 +74,13 @@ namespace Medicine.Windows
 
         private void sbSave_Click(object sender, RoutedEventArgs e)
         {
+            if (!this.teLastName.DoValidate()
+                | !this.teFirstName.DoValidate()
+                | !this.teMiddleName.DoValidate()
+                | !this.tePhone.DoValidate()
+                | !this.dtBirth.DoValidate())
+                return;
+
             this._patient.FirstName = this.teFirstName.Text;
             this._patient.LastName = this.teLastName.Text;
             this._patient.MiddleName = this.teMiddleName.Text;
@@ -92,6 +98,82 @@ namespace Medicine.Windows
             App.Context.SaveChanges();
 
             this.DialogResult = true;
+        }
+
+        bool lastName = true;
+        private void teLastName_Validate(object sender, DevExpress.Xpf.Editors.ValidationEventArgs e)
+        {
+            if (lastName)
+            {
+                lastName = false;
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(e.Value?.ToString()))
+                return;
+
+            e.IsValid = false;
+            e.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
+            e.ErrorContent = "Поле Фамилия обязательно для заполнения";
+        }
+
+        bool firstName = true;
+        private void teFirstName_Validate(object sender, DevExpress.Xpf.Editors.ValidationEventArgs e)
+        {
+            if (firstName)
+            {
+                firstName = false;
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(e.Value?.ToString()))
+                return;
+
+            e.IsValid = false;
+            e.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
+            e.ErrorContent = "Поле Имя обязательно для заполнения";
+        }
+
+        bool middleName = true;
+        private void teMiddleName_Validate(object sender, DevExpress.Xpf.Editors.ValidationEventArgs e)
+        {
+            if (middleName)
+            {
+                middleName = false;
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(e.Value?.ToString()))
+                return;
+
+            e.IsValid = false;
+            e.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
+            e.ErrorContent = "Поле Отчество обязательно для заполнения";
+        }
+
+        int birth = 0;
+        private void dtBirth_Validate(object sender, DevExpress.Xpf.Editors.ValidationEventArgs e)
+        {
+            if (birth < 3)
+            {
+                birth++;
+                return;
+            }
+
+            if (!DateTime.TryParse(e.Value?.ToString(), out var date))
+            {
+                e.IsValid = false;
+                e.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
+                e.ErrorContent = "Дата рождения обязательна для заполнения";
+                return;
+            }
+
+            if (date >= DateTime.Now.Date)
+            {
+                e.IsValid = false;
+                e.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
+                e.ErrorContent = "Дата рождения не может быть позднее текущей даты";
+            }
         }
     }
 }

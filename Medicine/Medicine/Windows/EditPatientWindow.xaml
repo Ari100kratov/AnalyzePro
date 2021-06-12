@@ -27,13 +27,13 @@
 
                             <dxlc:LayoutGroup Orientation="Vertical">
                                 <dxlc:LayoutItem Label="Фамилия">
-                                    <dxe:TextEdit x:Name="teLastName"/>
+                                    <dxe:TextEdit Validate="teLastName_Validate" x:Name="teLastName"/>
                                 </dxlc:LayoutItem>
                                 <dxlc:LayoutItem Label="Полное имя">
-                                    <dxe:TextEdit x:Name="teFirstName"/>
+                                    <dxe:TextEdit Validate="teFirstName_Validate" x:Name="teFirstName"/>
                                 </dxlc:LayoutItem>
                                 <dxlc:LayoutItem Label="Отчество">
-                                    <dxe:TextEdit x:Name="teMiddleName"/>
+                                    <dxe:TextEdit Validate="teMiddleName_Validate" x:Name="teMiddleName"/>
                                 </dxlc:LayoutItem>
 
                                 <dxlc:LayoutGroup >
@@ -46,7 +46,7 @@
                                 </dxlc:LayoutGroup>
 
                                 <dxlc:LayoutItem Label="Дата рождения">
-                                    <dxe:DateEdit x:Name="dtBirth"/>
+                                    <dxe:DateEdit Validate="dtBirth_Validate" x:Name="dtBirth"/>
                                 </dxlc:LayoutItem>
 
                                 <dxlc:LayoutItem Label="Телефон">

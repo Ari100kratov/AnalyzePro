@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
         <dxlc:LayoutControl >
             <dxlc:LayoutItem Label="Наименование">
-                <dxe:TextEdit x:Name="teName"/>
+                <dxe:TextEdit Validate="teName_Validate" x:Name="teName"/>
             </dxlc:LayoutItem>
         </dxlc:LayoutControl>
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">

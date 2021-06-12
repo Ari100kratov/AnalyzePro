@@ -61,6 +61,8 @@ namespace Medicine.Windows
                .Where(x => x.TemplateId == this._editItem.TemplateId)
                .ToList();
 
+            this._targetList.ForEach(x => x.IsChecked = false);
+
             this.tlcTargets.ItemsSource = this._targetList;
             this.tlvTargets.ExpandAllNodes();
         }
@@ -160,6 +162,9 @@ namespace Medicine.Windows
 
         private void sbSave_Click(object sender, RoutedEventArgs e)
         {
+            if (!this.teName.DoValidate())
+                return;
+
             this._editItem.TypeId = this._selectedType.Id;
             this._editItem.CheckLists = this._checkLists;
             this._editItem.MeasureUnit = this.teMeasureUnit.Text;
@@ -175,6 +180,14 @@ namespace Medicine.Windows
 
         private void tlcTargets_SelectedItemChanged(object sender, DevExpress.Xpf.Grid.SelectedItemChangedEventArgs e)
         {
+            var cells = this.tlvTargets.GetSelectedCells();
+            for (var i = 0; i < cells.Count(); i++)
+            {
+                var column = cells[i].Column;
+                var rowHandle = cells[i].RowHandle;
+                tlvTargets.UnselectCell(rowHandle, column);
+            }
+
             this._targetList.ForEach(x => x.IsChecked = false);
 
             if (this._selectedTarget != null)
@@ -215,11 +228,19 @@ namespace Medicine.Windows
                 this._targetList.ForEach(x => x.IsChecked = true);
                 this.tlvTargets.IsEnabled = false;
                 this.tlcTargets.RefreshData();
-                RefreshBorders();
+                this.RefreshBorders();
             }
             else
             {
-                this.tlcTargets.SelectedItem = null;
+                if (this.tlcTargets.SelectedItem != null)
+                    this.tlcTargets.SelectedItem = null;
+                else
+                {
+                    this._targetList.ForEach(x => x.IsChecked = false);
+                    this.tlcTargets.RefreshData();
+                    this.RefreshBorders();
+                }
+
                 this.tlvTargets.IsEnabled = true;
             }
         }
@@ -328,7 +349,7 @@ namespace Medicine.Windows
                             WarningMin = 0,
                             WarningMax = 0,
                             NormalItem = this._selectedNormalItem?.Id,
-                            WarningItem = this._selectedNormalItem?.Id
+                            WarningItem = this._selectedWarningItem?.Id
                         };
 
                         App.Context.Borders.Add(border);
@@ -354,7 +375,7 @@ namespace Medicine.Windows
                         border.WarningMin = 0;
                         border.WarningMax = 0;
                         border.NormalItem = this._selectedNormalItem?.Id;
-                        border.WarningItem = this._selectedNormalItem?.Id;
+                        border.WarningItem = this._selectedWarningItem?.Id;
                     }
                 }
 
@@ -362,7 +383,24 @@ namespace Medicine.Windows
             }
 
             App.Context.SaveChanges();
-            MessageBox.Show("ДАнные успешно сохранены", "Сообщение", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Данные успешно сохранены", "Сообщение", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        bool name = true;
+        private void teName_Validate(object sender, DevExpress.Xpf.Editors.ValidationEventArgs e)
+        {
+            if (name)
+            {
+                name = false;
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(e.Value?.ToString()))
+                return;
+
+            e.IsValid = false;
+            e.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
+            e.ErrorContent = "Наименование обязательно для заполнения";
         }
     }
 }

@@ -22,7 +22,7 @@
         <dxlc:LayoutControl Grid.Row="0" Grid.ColumnSpan="2">
             <dxlc:LayoutGroup Orientation="Vertical">
                 <dxlc:LayoutItem Label="Наименование">
-                    <dxe:TextEdit x:Name="teName"/>
+                    <dxe:TextEdit Validate="teName_Validate" x:Name="teName"/>
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Тип параметра">
                     <dxe:ComboBoxEdit x:Name="ceType" DisplayMember="Name" ValueMember="Id" EditValueChanged="ceType_EditValueChanged"/>
@@ -71,12 +71,20 @@
             <dxe:ToggleSwitch x:Name="tsForAll"  HorizontalAlignment="Left" Click="tsForAll_Click" />
         </StackPanel>
         
-        <dxg:TreeListControl x:Name="tlcTargets"  Grid.Row="2" Grid.Column="0" Margin="5,0" SelectionMode="Row"  SelectedItemChanged="tlcTargets_SelectedItemChanged" >
+        <dxg:TreeListControl x:Name="tlcTargets"  Grid.Row="2" Grid.Column="0" Margin="5,0"  SelectedItemChanged="tlcTargets_SelectedItemChanged" SelectionMode="Cell" >
             <dxg:TreeListControl.View>
-                <dxg:TreeListView CheckBoxFieldName="IsChecked" IsCheckBoxEnabledFieldName="IsEnabled"  ShowCheckboxes="True"  AutoExpandAllNodes="True" x:Name="tlvTargets" NewItemRowPosition="None" ParentFieldName="ParentId" KeyFieldName="Id" AutoWidth="True" AllowEditing="False"/>
+                <dxg:TreeListView  CheckBoxFieldName="IsChecked" IsCheckBoxEnabledFieldName="IsEnabled"  ShowCheckboxes="True"  AutoExpandAllNodes="True" x:Name="tlvTargets" NewItemRowPosition="None" ParentFieldName="ParentId" KeyFieldName="Id" AutoWidth="True" AllowEditing="False" >
+                    <dxg:TreeListView.FormatConditions>
+                        <dxg:FormatCondition Expression="[IsChecked] = 'True'" FieldName="Name" ApplyToRow="True">
+                            <dx:Format Background="#FFC4D5FF" Foreground="Black" TextDecorations="{x:Null}"/>
+                        </dxg:FormatCondition>
+                    </dxg:TreeListView.FormatConditions>
+                    
+                </dxg:TreeListView>
             </dxg:TreeListControl.View>
             <dxg:TreeListColumn FieldName="Name" Header="Целевая группа"/>
             <dxg:TreeListColumn FieldName="Description" Header="Примечание"/>
+            <dxg:TreeListColumn FieldName="IsChecked" Visible="False"/>
         </dxg:TreeListControl>
 
         <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2">

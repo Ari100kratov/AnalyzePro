@@ -45,6 +45,9 @@ namespace Medicine.Windows
 
         private void sbSave_Click(object sender, RoutedEventArgs e)
         {
+            if (!this.teName.DoValidate())
+                return;
+
             this._editTarget.Name = this.teName.Text;
             this._editTarget.Description = this.teDescription.Text;
             this._editTarget.ParentId = this._selectedParent.Id == 0
@@ -75,6 +78,23 @@ namespace Medicine.Windows
             this.teDescription.EditValue = this._editTarget.Description;
             this.ceParentGroup.SelectedItem = this._targetList
                 .Find(x => x.Id == this._editTarget.ParentId) ?? rootGroup;
+        }
+
+        bool name = true;
+        private void teName_Validate(object sender, DevExpress.Xpf.Editors.ValidationEventArgs e)
+        {
+            if (name)
+            {
+                name = false;
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(e.Value?.ToString()))
+                return;
+
+            e.IsValid = false;
+            e.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
+            e.ErrorContent = "Наименование обязательно для заполнения";
         }
     }
 }

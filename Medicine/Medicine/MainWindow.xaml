@@ -19,8 +19,8 @@
             </dxwui:HamburgerMenu.Content>
             <dxwui:HamburgerMenuNavigationButton NavigationTargetTypeName="StartPage" Content="Главная" GlyphWidth="32" GlyphHeight="32" IsSelected="True" Glyph="{dx:DXImage Images/Navigation/Home_32x32.png}"/>
             <dxwui:HamburgerMenuNavigationButton NavigationTargetTypeName="PatientPage" Content="Пациенты" GlyphWidth="32" GlyphHeight="32" Glyph="{dx:DXImage Images/Business Objects/BOPerson_32x32.png}"/>
-            <dxwui:HamburgerMenuNavigationButton Content="Анализы" NavigationTargetTypeName="TemplatePage" GlyphWidth="32" GlyphHeight="32" Glyph="{dx:DXImage Images/Filter Elements/ShowAll_32x32.png}"/>
-            <dxwui:HamburgerMenuHyperlinkButton Content="Support" NavigateUri="https://www.devexpress.com/Support/"/>
+            <dxwui:HamburgerMenuNavigationButton Content="Конструктор шаблонов" NavigationTargetTypeName="TemplatePage" GlyphWidth="32" GlyphHeight="32" Glyph="{dx:DXImage Images/Filter Elements/ShowAll_32x32.png}"/>
+            <dxwui:HamburgerMenuHyperlinkButton Content="Наш сайт" NavigateUri="http://rudnya-crb.ru/"/>
         </dxwui:HamburgerMenu>
 
     </Grid>

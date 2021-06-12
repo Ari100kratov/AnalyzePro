@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
         <dxlc:LayoutControl Orientation="Vertical">
             <dxlc:LayoutItem Label="Наименование">
-                <dxe:TextEdit x:Name="teName"/>
+                <dxe:TextEdit Validate="teName_Validate" x:Name="teName"/>
             </dxlc:LayoutItem>
             <dxlc:LayoutItem Label="Корневая группа">
                 <dxe:ComboBoxEdit x:Name="ceParentGroup" DisplayMember="Name" ValueMember="Id"/>

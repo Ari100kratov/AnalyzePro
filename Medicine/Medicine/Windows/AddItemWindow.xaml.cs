@@ -54,6 +54,9 @@ namespace Medicine.Windows
 
         private void sbSave_Click(object sender, RoutedEventArgs e)
         {
+            if (!this.teName.DoValidate())
+                return;
+
             if (this._newItem != null)
             {
                 this._newItem.Name = this.teName.Text;
@@ -67,6 +70,23 @@ namespace Medicine.Windows
 
             App.Context.SaveChanges();
             this.DialogResult = true;
+        }
+
+        bool name = true;
+        private void teName_Validate(object sender, DevExpress.Xpf.Editors.ValidationEventArgs e)
+        {
+            if (name)
+            {
+                name = false;
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(e.Value?.ToString()))
+                return;
+
+            e.IsValid = false;
+            e.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
+            e.ErrorContent = "Наименование обязательно для заполнения";
         }
     }
 }
