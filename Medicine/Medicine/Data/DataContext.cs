@@ -35,5 +35,7 @@ namespace Medicine.Data
         public DbSet<Item> Items { get; set; }
         public DbSet<Target> Targets { get; set; }
         public DbSet<Border> Borders { get; set; }
+        public DbSet<History> Histories { get; set; }
+        public DbSet<ResultData> ResultDatas { get; set; }
     }
 }

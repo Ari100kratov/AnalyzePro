@@ -72,9 +72,7 @@
                     </dxlc:LayoutGroup>
                 </dxlc:LayoutControl>
             </dx:DXTabItem>
-            <dx:DXTabItem Header="Документы">
-                <Grid Background="Transparent"/>
-            </dx:DXTabItem>
+            
         </dx:DXTabControl>
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
             <dx:SimpleButton x:Name="sbCancel" Content="Отменить" Margin="5" Height="30" Width="130" Click="sbCancel_Click" Glyph="{dx:DXImage Images/Actions/Cancel_16x16.png}" />

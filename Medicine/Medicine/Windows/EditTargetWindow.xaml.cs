@@ -25,15 +25,18 @@ namespace Medicine.Windows
         private bool _isAdd => this._editTarget.Id == 0;
         private List<Target> _targetList = new List<Target>();
         private Target _selectedParent => this.ceParentGroup.SelectedItem as Target;
+
+        private Target _initTarget;
         public EditTargetWindow()
         {
             InitializeComponent();
         }
 
-        public static bool? Execute(Target target)
+        public static bool? Execute(Target target, Target parentTarget = null)
         {
             var window = new EditTargetWindow();
             window._editTarget = target;
+            window._initTarget = parentTarget;
             window.Title = window._isAdd ? "Новая группа" : "Редактирование группы";
             return window.ShowDialog();
         }
@@ -76,8 +79,13 @@ namespace Medicine.Windows
             this.ceParentGroup.ItemsSource = this._targetList;
             this.teName.EditValue = this._editTarget.Name;
             this.teDescription.EditValue = this._editTarget.Description;
-            this.ceParentGroup.SelectedItem = this._targetList
-                .Find(x => x.Id == this._editTarget.ParentId) ?? rootGroup;
+
+            if (!this._isAdd)
+                this.ceParentGroup.SelectedItem = this._targetList
+                    .Find(x => x.Id == this._editTarget.ParentId) ?? rootGroup;
+            else
+                this.ceParentGroup.SelectedItem = this._targetList
+                    .Find(x => x.Id == this._initTarget?.Id) ?? rootGroup;
         }
 
         bool name = true;

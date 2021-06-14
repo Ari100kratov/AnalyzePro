@@ -16,5 +16,6 @@ namespace Medicine.Data.Entities
         public virtual Template Template { get; set; }
         public virtual List<CheckList> CheckLists { get; set; }
         public virtual List<Border> Borders { get; set; }
+        public virtual List<ResultData> ResultDatas { get; set; }
     }
 }

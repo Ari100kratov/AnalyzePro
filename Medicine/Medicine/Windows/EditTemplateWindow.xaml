@@ -38,7 +38,7 @@
 
                 <dxlc:LayoutGroup x:Name="lgEditMode" Visibility="Collapsed">
                     <dxlc:LayoutItem Label="Группа">
-                        <dxe:TextEdit x:Name="teGroup"/>
+                        <dxe:TextEdit x:Name="teGroup" Validate="teGroup_Validate"/>
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Width="30">
                         <dx:SimpleButton x:Name="sbGroupSave" Height="22" Click="sbGroupSave_Click" Glyph="{dx:DXImage Images/Save/Save_16x16.png}"/>

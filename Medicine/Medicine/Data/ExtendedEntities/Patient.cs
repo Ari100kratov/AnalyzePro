@@ -11,6 +11,7 @@ namespace Medicine.Data.Entities
 {
     public partial class Patient
     {
+        public string FullName => $"{this.LastName} {this.FirstName} {this.MiddleName}";
         public int Age => DateTime.Now.Year - this.BirthDate.Year;
 
         public string Gender

@@ -25,5 +25,7 @@ namespace Medicine.Data.Entities
         public string ResAddress { get; set; }
         [Column(TypeName = "image")]
         public byte[] Photo { get; set; }
+
+        public virtual List<History> Histories { get; set; }
     }
 }

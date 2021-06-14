@@ -1,0 +1,111 @@
+﻿<dx:ThemedWindow xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"  xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"   xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" x:Class="Medicine.Windows.EditHistoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Medicine.Windows" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+                 mc:Ignorable="d"
+        Height="450" Width="800" Loaded="ThemedWindow_Loaded" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition ></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Center">
+            <dx:SimpleButton x:Name="sbCancel" Content="Отменить" Margin="5" Height="30" Width="130" Glyph="{dx:DXImage Images/Actions/Cancel_16x16.png}" Click="sbCancel_Click" />
+            <dx:SimpleButton x:Name="sbSave" Content="Сохранить" Height="30" Width="130" Margin="0,5" Glyph="{dx:DXImage Images/Save/Save_16x16.png}" Click="sbSave_Click"/>
+        </StackPanel>
+
+        <dxlc:GroupBox Header="Выберите пациента" Grid.Column="0" Grid.Row="0">
+            <ScrollViewer ScrollViewer.CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <dxe:ComboBoxEdit Validate="cePatient_Validate" Grid.Row="0" Grid.ColumnSpan="2" x:Name="cePatient" DisplayMember="FullName" ValueMember="Id" EditValueChanged="cePatient_EditValueChanged"/>
+                    <dxe:ImageEdit x:Name="iePhoto" Grid.Row="1" Grid.ColumnSpan="2" Height="180" Width="170" ShowMenu="False" Margin="0,5,0,0" HorizontalAlignment="Center" Stretch="Fill"/>
+
+                    <Label Grid.Row="2" Grid.Column="0" Content="Фамилия:"></Label>
+                    <Label x:Name="lblLastName" Grid.Row="2" Grid.Column="1" Content="-" HorizontalAlignment="Left"></Label>
+
+                    <Label Grid.Row="3" Grid.Column="0" Content="Имя:"></Label>
+                    <Label x:Name="lblFirstName" Grid.Row="3" Grid.Column="1" Content="-" HorizontalAlignment="Left"></Label>
+
+                    <Label Grid.Row="4" Grid.Column="0" Content="Отчество:"></Label>
+                    <Label x:Name="lblMiddleName" Grid.Row="4" Grid.Column="1" Content="-" HorizontalAlignment="Left"></Label>
+
+                    <Label Grid.Row="5" Grid.Column="0" Content="Пол:"></Label>
+                    <Label x:Name="lblAge" Grid.Row="5" Grid.Column="1" Content="-" HorizontalAlignment="Left"></Label>
+
+                    <Label Grid.Row="6" Grid.Column="0" Content="Возраст:"></Label>
+                    <Label x:Name="lblGender" Grid.Row="6" Grid.Column="1" Content="-" HorizontalAlignment="Left"></Label>
+                </Grid>
+            </ScrollViewer>
+        </dxlc:GroupBox>
+
+        <dxlc:GroupBox Padding="0" Header="Шаблон анализа" Grid.Column="1" Grid.Row="0">
+            <ScrollViewer Padding="0" ScrollViewer.CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <Grid x:Name="gridItems">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <dxe:ComboBoxEdit Validate="ceTemplate_Validate" Grid.Row="0" Grid.ColumnSpan="3" x:Name="ceTemplate" Height="22" VerticalAlignment="Top" DisplayMember="Name" ValueMember="Id" EditValueChanged="ceTemplate_EditValueChanged" Margin="11,11,11,0"/>
+                    <Label Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="Параметры анализа" Grid.Row="1" Margin="0,5,0,0" FontSize="14" ></Label>
+                </Grid>
+            </ScrollViewer>
+        </dxlc:GroupBox>
+
+        <dxlc:GroupBox Header="Дата и целевая группа" Grid.Column="2" Grid.Row="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <dxe:DateEdit Validate="deCreate_Validate" x:Name="deCreate" Grid.Row="0"/>
+                <dxg:TreeListControl x:Name="tlcTargets"  Grid.Row="2" Grid.Column="0"   SelectedItemChanged="tlcTargets_SelectedItemChanged" SelectionMode="Cell" Margin="0,5,0,0" >
+                    <dxg:TreeListControl.View>
+                        <dxg:TreeListView  CheckBoxFieldName="IsChecked" IsCheckBoxEnabledFieldName="IsEnabled"  ShowCheckboxes="True"  AutoExpandAllNodes="True" x:Name="tlvTargets" NewItemRowPosition="None" ParentFieldName="ParentId" KeyFieldName="Id" AutoWidth="True" AllowEditing="False" >
+                            <dxg:TreeListView.FormatConditions>
+                                <dxg:FormatCondition Expression="[IsChecked] = 'True'" FieldName="Name" ApplyToRow="True">
+                                    <dx:Format Background="#FFC4D5FF" Foreground="Black" TextDecorations="{x:Null}"/>
+                                </dxg:FormatCondition>
+                            </dxg:TreeListView.FormatConditions>
+
+                        </dxg:TreeListView>
+                    </dxg:TreeListControl.View>
+                    <dxg:TreeListColumn FieldName="Name" Header="Целевая группа"/>
+                    <dxg:TreeListColumn FieldName="Description" Header="Примечание"/>
+                    <dxg:TreeListColumn FieldName="IsChecked" Visible="False"/>
+                </dxg:TreeListControl>
+            </Grid>
+        </dxlc:GroupBox>
+
+
+    </Grid>
+</dx:ThemedWindow>

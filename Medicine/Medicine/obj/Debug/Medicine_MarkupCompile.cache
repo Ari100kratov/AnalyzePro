@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 
-10-269044696
+121616515363
 
-25117934146
+30696412634
 36-708054647
-App.xaml;MainWindow.xaml;Pages\PatientPage.xaml;Pages\StartPage.xaml;Pages\TemplatePage.xaml;Windows\AddItemWindow.xaml;Windows\EditItemWindow.xaml;Windows\EditPatientWindow.xaml;Windows\EditTargetWindow.xaml;Windows\EditTemplateWindow.xaml;
+App.xaml;MainWindow.xaml;Pages\HistoryPage.xaml;Pages\PatientPage.xaml;Pages\StartPage.xaml;Pages\TemplatePage.xaml;Windows\AddItemWindow.xaml;Windows\EditHistoryWindow.xaml;Windows\EditItemWindow.xaml;Windows\EditPatientWindow.xaml;Windows\EditTargetWindow.xaml;Windows\EditTemplateWindow.xaml;
 
 False
 

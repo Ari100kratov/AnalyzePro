@@ -40,7 +40,6 @@ D:\src\my\AnalyzePro\Medicine\Medicine\bin\Debug\de\DevExpress.Pdf.v20.1.Core.re
 D:\src\my\AnalyzePro\Medicine\Medicine\bin\Debug\es\DevExpress.Pdf.v20.1.Core.resources.dll
 D:\src\my\AnalyzePro\Medicine\Medicine\bin\Debug\ja\DevExpress.Pdf.v20.1.Core.resources.dll
 D:\src\my\AnalyzePro\Medicine\Medicine\bin\Debug\ru\DevExpress.Pdf.v20.1.Core.resources.dll
-D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Medicine.csproj.AssemblyReference.cache
 D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\MainWindow.g.cs
 D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\App.g.cs
 D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Medicine_MarkupCompile.cache
@@ -132,3 +131,8 @@ D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Windows\EditItemWindow.baml
 D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\App.baml
 D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Windows\EditTargetWindow.g.cs
 D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Windows\EditTargetWindow.baml
+D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Pages\HistoryPage.g.cs
+D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Pages\HistoryPage.baml
+D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Windows\EditHistoryWindow.g.cs
+D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Windows\EditHistoryWindow.baml
+D:\src\my\AnalyzePro\Medicine\Medicine\obj\Debug\Medicine.csproj.AssemblyReference.cache

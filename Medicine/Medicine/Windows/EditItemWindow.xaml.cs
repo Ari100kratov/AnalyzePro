@@ -83,6 +83,9 @@ namespace Medicine.Windows
 
         private void sbGroupSave_Click(object sender, RoutedEventArgs e)
         {
+            if (!this.teGroup.DoValidate())
+                return;
+
             var editCheckList = this._isAddCheckListMode
                 ? new CheckList { ItemId = this._editItem.Id }
                 : this._selectedCheckList;
@@ -113,6 +116,9 @@ namespace Medicine.Windows
 
         private void sbEditGroup_Click(object sender, RoutedEventArgs e)
         {
+            if (!this.teGroup.DoValidate())
+                return;
+
             this.lgSelectMode.Visibility = Visibility.Collapsed;
             this.lgEditMode.Visibility = Visibility.Visible;
             this._isAddCheckListMode = false;
@@ -165,6 +171,15 @@ namespace Medicine.Windows
             if (!this.teName.DoValidate())
                 return;
 
+            if (this._selectedType.Id == 0 && !this.teMeasureUnit.DoValidate())
+                return;
+
+            if (this._selectedType.Id == 1 && this._checkLists.Count == 0)
+            {
+                MessageBox.Show("Заполните список хотя бы одним значением", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             this._editItem.TypeId = this._selectedType.Id;
             this._editItem.CheckLists = this._checkLists;
             this._editItem.MeasureUnit = this.teMeasureUnit.Text;
@@ -176,7 +191,6 @@ namespace Medicine.Windows
         }
 
         private Target _selectedTarget => this.tlcTargets.SelectedItem as Target;
-        private List<Target> _selectedTargets = new List<Target>();
 
         private void tlcTargets_SelectedItemChanged(object sender, DevExpress.Xpf.Grid.SelectedItemChangedEventArgs e)
         {
@@ -277,9 +291,8 @@ namespace Medicine.Windows
                 .Where(x => x.ItemId == this._editItem.Id)
                 .ToList();
 
-            var border = borderList
-                .Where(x => checkedTargets.Exists(c => c.BorderId == x.Id))
-                .LastOrDefault();
+            var target = checkedTargets.FirstOrDefault(x => checkedTargets.FindAll(t => t.ParentId == x.Id).Count == 0);
+            var border = borderList.Find(x => x.Id == target?.BorderId);
 
             if (this._selectedType.Id == 0)
             {
@@ -401,6 +414,40 @@ namespace Medicine.Windows
             e.IsValid = false;
             e.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
             e.ErrorContent = "Наименование обязательно для заполнения";
+        }
+
+        bool measure = true;
+        private void teMeasureUnit_Validate(object sender, DevExpress.Xpf.Editors.ValidationEventArgs e)
+        {
+            if (measure)
+            {
+                measure = false;
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(e.Value?.ToString()))
+                return;
+
+            e.IsValid = false;
+            e.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
+            e.ErrorContent = "Ед. измерения обязательно для заполнения";
+        }
+
+        int group = 0;
+        private void teGroup_Validate(object sender, DevExpress.Xpf.Editors.ValidationEventArgs e)
+        {
+            if (group < 2)
+            {
+                group++;
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(e.Value?.ToString()))
+                return;
+
+            e.IsValid = false;
+            e.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
+            e.ErrorContent = "Обязательно для заполнения";
         }
     }
 }

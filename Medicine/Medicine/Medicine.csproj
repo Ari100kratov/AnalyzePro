@@ -92,12 +92,18 @@
     <Compile Include="Common\ItemType.cs" />
     <Compile Include="Data\Entities\Border.cs" />
     <Compile Include="Data\Entities\CheckList.cs" />
+    <Compile Include="Data\Entities\History.cs" />
     <Compile Include="Data\Entities\Item.cs" />
+    <Compile Include="Data\Entities\ResultData.cs" />
     <Compile Include="Data\Entities\Target.cs" />
     <Compile Include="Data\Entities\Template.cs" />
     <Compile Include="Data\Entities\TemplateGroup.cs" />
+    <Compile Include="Data\ExtendedEntities\History.cs" />
     <Compile Include="Data\ExtendedEntities\Item.cs" />
     <Compile Include="Data\ExtendedEntities\Patient.cs" />
+    <Compile Include="Pages\HistoryPage.xaml.cs">
+      <DependentUpon>HistoryPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\StartPage.xaml.cs">
       <DependentUpon>StartPage.xaml</DependentUpon>
     </Compile>
@@ -106,6 +112,9 @@
     </Compile>
     <Compile Include="Windows\AddItemWindow.xaml.cs">
       <DependentUpon>AddItemWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditHistoryWindow.xaml.cs">
+      <DependentUpon>EditHistoryWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\EditItemWindow.xaml.cs">
       <DependentUpon>EditItemWindow.xaml</DependentUpon>
@@ -133,6 +142,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\HistoryPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\PatientPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -146,6 +159,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AddItemWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\EditHistoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

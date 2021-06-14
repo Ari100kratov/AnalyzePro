@@ -106,6 +106,9 @@ namespace Medicine.Windows
 
         private void sbGroupSave_Click(object sender, RoutedEventArgs e)
         {
+            if (!this.teGroup.DoValidate())
+                return;
+
             var editGroup = this._isAddGroupMode ? new TemplateGroup() : this._selectedGroup;
             editGroup.Name = this.teGroup.Text;
 
@@ -161,7 +164,7 @@ namespace Medicine.Windows
         private void sbAddTarget_Click(object sender, RoutedEventArgs e)
         {
             var newTarget = new Target { TemplateId = this._editTemplate.Id };
-            if (EditTargetWindow.Execute(newTarget) == true)
+            if (EditTargetWindow.Execute(newTarget, this._selectedTarget) == true)
             {
                 this._targetList.Add(newTarget);
                 this.tlcTargets.RefreshData();
@@ -211,6 +214,23 @@ namespace Medicine.Windows
             e.IsValid = false;
             e.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
             e.ErrorContent = "Наименование обязательно для заполнения";
+        }
+
+        int group = 0;
+        private void teGroup_Validate(object sender, DevExpress.Xpf.Editors.ValidationEventArgs e)
+        {
+            if (group < 2)
+            {
+                group++;
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(e.Value?.ToString()))
+                return;
+
+            e.IsValid = false;
+            e.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
+            e.ErrorContent = "Обязательно для заполнения";
         }
     }
 }
