@@ -293,13 +293,13 @@ namespace Medicine.Windows
             if (!this._rectDic.TryGetValue(itemId, out var rect))
                 return;
 
-            if (!int.TryParse(e.NewValue?.ToString(), out var value) || item is null || target is null || !target.BorderId.HasValue)
+            if (!int.TryParse(e.NewValue?.ToString(), out var value) || item is null || target is null)
             {
                 rect.Fill = Brushes.Transparent;
                 return;
             }
 
-            var border = App.Context.Borders.Find(target.BorderId);
+            var border = App.Context.Borders.FirstOrDefault(x => x.ItemId == itemId && x.TargetId == target.Id);
             if (border is null)
             {
                 rect.Fill = Brushes.Transparent;
@@ -332,13 +332,13 @@ namespace Medicine.Windows
             if (!this._rectDic.TryGetValue(itemId, out var rect))
                 return;
 
-            if (!decimal.TryParse(e.NewValue?.ToString(), out var value) || item is null || target is null || !target.BorderId.HasValue)
+            if (!decimal.TryParse(e.NewValue?.ToString(), out var value) || item is null || target is null)
             {
                 rect.Fill = Brushes.Transparent;
                 return;
             }
 
-            var border = App.Context.Borders.Find(target.BorderId);
+            var border = App.Context.Borders.FirstOrDefault(x => x.ItemId == itemId && x.TargetId == target.Id);
             if (border is null)
             {
                 rect.Fill = Brushes.Transparent;
@@ -533,8 +533,11 @@ namespace Medicine.Windows
 
                 rect.Fill = Brushes.Transparent;
 
-                var border = App.Context.Borders.Find(target?.BorderId);
-                if (border is null || item is null || target is null)
+                if (target is null)
+                    continue;
+
+                var border = App.Context.Borders.FirstOrDefault(x => x.ItemId == itemId && x.TargetId == target.Id);
+                if (border is null || item is null)
                     continue;
 
                 if (baseEdit is SpinEdit spinEdit)

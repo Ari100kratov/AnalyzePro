@@ -15,7 +15,9 @@ namespace Medicine.Data.Entities
         public decimal NormalMax { get; set; }
         public int? WarningItem { get; set; }
         public int? NormalItem { get; set; }
-        public virtual List<Target> Targets { get; set; }
+
+        public int? TargetId { get; set; }
+        public virtual Target Target { get; set; }
         public int ItemId { get; set; }
         public virtual Item Item { get; set; }
     }

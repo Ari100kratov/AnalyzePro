@@ -15,14 +15,13 @@ namespace Medicine.Data.Entities
         public int? ParentId { get; set; }
         public int TemplateId { get; set; }
 
+        public virtual Template Template { get; set; }
+        public virtual List<Border> Borders { get; set; }
+
         [NotMapped]
         public bool IsChecked { get; set; }
 
         [NotMapped]
         public bool IsEnabled { get; set; }
-
-        public virtual Template Template { get; set; }
-        public int? BorderId { get; set; }
-        public virtual Border Border{ get; set; }
     }
 }

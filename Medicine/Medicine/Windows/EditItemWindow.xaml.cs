@@ -292,7 +292,7 @@ namespace Medicine.Windows
                 .ToList();
 
             var target = checkedTargets.FirstOrDefault(x => checkedTargets.FindAll(t => t.ParentId == x.Id).Count == 0);
-            var border = borderList.Find(x => x.Id == target?.BorderId);
+            var border = borderList.Find(x => x.TargetId == target?.Id);
 
             if (this._selectedType.Id == 0)
             {
@@ -333,7 +333,7 @@ namespace Medicine.Windows
 
             foreach (var target in checkedTargets)
             {
-                var border = borderList.Find(x => x.Id == target.BorderId);
+                var border = borderList.Find(x => x.TargetId == target.Id);
                 if (border is null)
                 {
                     if (this._selectedType.Id == 0)
@@ -392,7 +392,7 @@ namespace Medicine.Windows
                     }
                 }
 
-                target.BorderId = border.Id;
+                border.TargetId = target.Id;
             }
 
             App.Context.SaveChanges();
