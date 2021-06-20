@@ -1,4 +1,5 @@
-﻿using DevExpress.Xpf.WindowsUI;
+﻿using DevExpress.Xpf.Printing;
+using DevExpress.Xpf.WindowsUI;
 using Medicine.Data.Entities;
 using Medicine.Windows;
 using System;
@@ -103,6 +104,7 @@ namespace Medicine.Pages
         private void gcHistory_SelectedItemChanged(object sender, DevExpress.Xpf.Grid.SelectedItemChangedEventArgs e)
         {
             this.sbEdit.IsEnabled =
+                this.sbPrint.IsEnabled =
                 this.sbDelete.IsEnabled = this._selectedHistory != null;
         }
 
@@ -126,6 +128,12 @@ namespace Medicine.Pages
                 this.gcHistory.RefreshData();
                 this.gcHistory.SelectedItem = this._historyList.FirstOrDefault();
             }
+        }
+
+        private void sbPrint_Click(object sender, RoutedEventArgs e)
+        {
+            var report = HistoryReport.CreateReport(this._selectedHistory);
+            PrintHelper.ShowRibbonPrintPreview(this, report);
         }
     }
 }
